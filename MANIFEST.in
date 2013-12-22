@@ -1,0 +1,4 @@
+include README.rst
+include examples/README
+include examples/*.py
+include testapp.py
