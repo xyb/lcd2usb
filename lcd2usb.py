@@ -83,6 +83,15 @@ class LCD(object):
         self.buffer_current_fill = 0  # -"-
         self.buffer = bytearray(self.BUFFER_MAX_CMD)
 
+    @classmethod
+    def find_or_die(cls):
+        try:
+            return cls()
+        except LCD2USBNotFound, exc:
+            print 'Error:', exc
+            import sys
+            sys.exit(1)
+
     def close(self):
         '''close usb device connection'''
 
@@ -307,6 +316,29 @@ class LCD(object):
         self.write_char(0, 0, 0)
         self.write_char(0, 19, 0)
 
+    def fill(self, message, row_index=0, align='left'):
+        if not isinstance(message, str):
+            message = str(message)
+        size = 20
+        if len(message) > size:
+            fillup = message[:size]
+        else:
+            if align == 'left':
+                fillup = message.ljust(size)
+            elif align == 'center':
+                fillup = message.center(size)
+            elif align == 'right':
+                fillup = message.rjust(size)
+            else:
+                fillup = message.ljust(size)
+        self.write(fillup, 0, row_index)
+
+    def fill_center(self, message, row_index=0):
+        self.fill(message, row_index, align='center')
+
+    def fill_right(self, message, row_index=0):
+        self.fill(message, row_index, align='right')
+
 
 def test():
     '''Test the lcd2usb device and show a demo.
@@ -316,12 +348,7 @@ def test():
         python -m lcd2usb
     '''
 
-    try:
-        lcd = LCD()
-    except LCD2USBNotFound, exc:
-        print exc
-        import sys
-        sys.exit(-1)
+    lcd = LCD.find_or_die()
     lcd.info()
     print 'echo 1234, get:', lcd.echo(1234)
     print 'version:', '%s.%s' % lcd.version

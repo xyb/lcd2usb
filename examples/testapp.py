@@ -7,11 +7,10 @@
 '''
 
 import random
-import sys
 import time
 import usb1
 
-from lcd2usb import LCD, LCD2USBNotFound
+from lcd2usb import LCD
 
 
 def list_usb():
@@ -96,12 +95,8 @@ def main():
     print '--        (c) 2013 by Xie Yanbo        --'
     print '-- http://www.harbaum.org/till/lcd2usb --'
 
-    #list_usb()
-    try:
-        lcd = LCD()
-    except LCD2USBNotFound, exc:
-        print exc
-        sys.exit(1)
+    list_usb()
+    lcd = LCD.find_or_die()
 
     # make lcd interface return some bytes to test transfer reliability
     lcd_echo(lcd)
