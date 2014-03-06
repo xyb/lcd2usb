@@ -4,7 +4,6 @@
 '''Python wrapper for LCD2USB
 '''
 
-import ctypes
 import struct
 
 import libusb1
@@ -42,10 +41,8 @@ LCD_GET_RESERVED1 = LCD_GET | (3 << 3)
 SMILE_SYMBOL = bytearray([0x00, 0x0a, 0x0a, 0x00, 0x11, 0x0e, 0x00, 0x00])
 
 
-TYPE_VENDOR = libusb1.libusb_request_type.forward_dict['LIBUSB_TYPE_VENDOR']
-REQUEST_GET_TYPE = TYPE_VENDOR | libusb1.LIBUSB_RECIPIENT_DEVICE | \
-    libusb1.LIBUSB_ENDPOINT_IN
-
+TYPE_VENDOR = libusb1.LIBUSB_TYPE_VENDOR
+REQUEST_GET_TYPE = TYPE_VENDOR | libusb1.LIBUSB_RECIPIENT_DEVICE
 
 class LCD2USBNotFound(Exception):
     '''LCD2USB device not found'''
@@ -108,11 +105,6 @@ class LCD(object):
 
         return bus, dev
 
-    @property
-    def __control(self):
-        '''helper method'''
-        return self.device._controlTransfer
-
     def echo(self, value):
         '''echo test
 
@@ -121,31 +113,29 @@ class LCD(object):
         command. This may be used to check the reliability of
         the usb interfacing'''
 
-        ret = usb1.create_binary_buffer(2)
-        n_bytes = self.__control(REQUEST_GET_TYPE, LCD_ECHO, value, 0,
-                                 ret, ctypes.sizeof(ret), 1000)
-        if n_bytes < 0:
+        try:
+            buf = self.device.controlRead(REQUEST_GET_TYPE, LCD_ECHO, value,
+                                          0, 2, 1000)
+        except libusb1.USBError:
             print 'USB request failed!'
             return -1
-
-        ret, = struct.unpack('H', ret.raw)  # unsigned short, size 2
+        ret, = struct.unpack('H', buf)  # unsigned short, size 2
         return ret
 
     def get(self, command):
         '''get a value from the lcd2usb interface'''
 
-        buf = usb1.create_binary_buffer(2)
-
         # send control request and accept return value
-        n_bytes = self.__control(REQUEST_GET_TYPE, command, 0, 0,
-                                 buf, ctypes.sizeof(buf), 1000)
-        if n_bytes < 0:
+        try:
+            buf = self.device.controlRead(REQUEST_GET_TYPE, command, 0, 0, 2,
+                                          1000)
+        except libusb1.USBError:
             print 'USB request failed!'
             return -1
 
         # low, high = struct.unpack('BB', buf.raw)  # 2 unsigned char
         # return low + 256 * high
-        ret, = struct.unpack('H', buf.raw)
+        ret, = struct.unpack('H', buf)
         return ret
 
     @property
@@ -178,10 +168,11 @@ class LCD(object):
     def set(self, command, value):
         '''set a value in the LCD interface'''
 
-        n_bytes = self.__control(TYPE_VENDOR, command, value, 0, 0, 0, 1000)
-        if n_bytes < 0:
+        try:
+            self.device.controlWrite(TYPE_VENDOR, command, value, 0, '', 1000)
+        except libusb1.USBError:
             print 'USB request failed!'
-        return n_bytes
+        return 0
 
     def set_contrast(self, value):
         '''set contrast to a value between 0 and 255.
@@ -255,9 +246,10 @@ class LCD(object):
 
     def _send(self, request, value, index):
         '''send an usb control message'''
-        n_bytes = self.__control(TYPE_VENDOR, request, value,
-                                 index, 0, 0, 1000)
-        if n_bytes < 0:
+        try:
+            self.device.controlWrite(TYPE_VENDOR, request, value,
+                           index, '', 1000)
+        except libusb1.USBError:
             print 'USB request failed!'
             return -1
         return 0
