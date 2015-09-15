@@ -1,0 +1,9 @@
+# Find your device information with command "lsusb"
+# Change ATTR{idVendor} and ATTR{idProduct} to match.
+#
+# In my case : Bus 006 Device 002: ID 0403:c630 Future Technology Devices International, Ltd lcd2usb interface
+#
+# This allows users to access the usb device without requiring root permissions
+#
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0403", ATTR{idProduct}=="c630", MODE="0666"
+
