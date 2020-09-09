@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 import os
 
 long_description = open(os.path.join(os.path.dirname(__file__), 'README.rst')
