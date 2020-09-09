@@ -10,26 +10,26 @@ import time
 
 from lcd2usb import LCD
 
-RE_UPTIME = re.compile('(.*?)\s+up\s+(.*?),\s+(\d+) users?,\s+'
-                       'load averages?: (\d+\.\d+),?'
-                       '\s+(\d+\.\d+),?\s+(\d+\.\d+)')
+RE_UPTIME = re.compile(r'(.*?)\s+up\s+(.*?),\s+(\d+) users?,\s+'
+                       r'load averages?: (\d+\.\d+),?'
+                       r'\s+(\d+\.\d+),?\s+(\d+\.\d+)')
 
 
 def load_uptime():
     info = subprocess.check_output('uptime')
-    _, duration, users, avg1, avg5, avg15 = RE_UPTIME.match(info).groups()
+    _, duration, users, avg1, avg5, avg15 = RE_UPTIME.match(str(info)).groups()
     days = '0'
     hours = '0'
     mins = '0'
     if 'day' in duration:
-        match = re.search('([0-9]+)\s+day', duration)
+        match = re.search(r'([0-9]+)\s+day', duration)
         days = str(int(match.group(1)))
     if ':' in duration:
-        match = re.search('([0-9]+):([0-9]+)', duration)
+        match = re.search(r'([0-9]+):([0-9]+)', duration)
         hours = str(int(match.group(1)))
         mins = str(int(match.group(2)))
     if 'min' in duration:
-        match = re.search('([0-9]+)\s+min', duration)
+        match = re.search(r'([0-9]+)\s+min', duration)
         mins = str(int(match.group(1)))
     return int(days), int(hours), int(mins), int(users), \
         float(avg1), float(avg5), float(avg15)

@@ -21,17 +21,17 @@ def list_usb():
     for device in devices:
         vendor = device.getVendorID()
         product = device.getProductID()
-        print 'ID %04x:%04x' % (vendor, product),
+        print('ID %04x:%04x' % (vendor, product), end=' ')
         bus = device.getBusNumber()
-        print '->Bus %03i' % bus,
+        print('->Bus %03i' % bus, end=' ')
         dev = device.getDeviceAddress()
-        print 'Device', dev,
+        print('Device', dev, end=' ')
         try:
-            print device.getProduct(),
-            print 'by', device.getManufacturer(),
+            print(device.getProduct(), end=' ')
+            print('by', device.getManufacturer(), end=' ')
         except:
             pass
-        print
+        print()
 
 
 ECHO_NUM = 100
@@ -51,17 +51,17 @@ def lcd_echo(lcd):
             errors += 1
 
     if errors:
-        print 'ERROR: %d out of %d echo transfers failed!' % (errors,
-                                                              ECHO_NUM)
+        print('ERROR: %d out of %d echo transfers failed!' % (errors,
+                                                              ECHO_NUM))
     else:
-        print 'Echo test successful!'
+        print('Echo test successful!')
 
 
 def lcd_get_version(lcd):
     '''get lcd2usb interface firmware version'''
 
     major, minor = lcd.version
-    print 'Firmware version %d.%d' % (major, minor)
+    print('Firmware version %d.%d' % (major, minor))
 
 
 def lcd_get_controller(lcd):
@@ -71,29 +71,29 @@ def lcd_get_controller(lcd):
     controller display'''
 
     if not lcd.ctrl0 and not lcd.ctrl1:
-        print 'No controllers installed!'
+        print('No controllers installed!')
     else:
-        print 'Installed controllers:',
+        print('Installed controllers:', end=' ')
         if lcd.ctrl0:
-            print 'CTRL0',
+            print('CTRL0', end=' ')
         if lcd.ctrl1:
-            print 'CTRL1',
-        print
+            print('CTRL1', end=' ')
+        print()
 
 
 def lcd_get_keys(lcd):
     '''get state of the two optional buttons'''
 
     key1, key2 = lcd.keys
-    print 'Keys: 0:%s 1:%s' % (key1 and 'on' or 'off',
-                               key2 and 'on' or 'off')
+    print('Keys: 0:%s 1:%s' % (key1 and 'on' or 'off',
+                               key2 and 'on' or 'off'))
 
 
 def main():
-    print '--      LCD2USB test application       --'
-    print '--      (c) 2006 by Till Harbaum       --'
-    print '--        (c) 2013 by Xie Yanbo        --'
-    print '-- http://www.harbaum.org/till/lcd2usb --'
+    print('--      LCD2USB test application       --')
+    print('--      (c) 2006 by Till Harbaum       --')
+    print('--        (c) 2013 by Xie Yanbo        --')
+    print('-- http://www.harbaum.org/till/lcd2usb --')
 
     list_usb()
     lcd = LCD.find_or_die()

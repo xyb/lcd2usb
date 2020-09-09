@@ -25,7 +25,7 @@ def blink(lcd):
 if __name__ == '__main__':
     lcd = LCD.find_or_die()
     lcd.info()
-    print 'version:', '%s.%s' % lcd.version
+    print('version: %s.%s' % lcd.version)
     try:
         blink(lcd)
     except KeyboardInterrupt:
