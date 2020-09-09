@@ -57,9 +57,9 @@ If you need a quickly running test for your device, use this::
 Requirements
 ============
 
-- Python_ 2.5+ required
+- Python_ 3 required
 
-- ctypes_ (included in Python 2.5+)
+- ctypes_ (included in Python)
 
 - libusb-1.0_
 
