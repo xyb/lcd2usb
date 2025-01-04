@@ -183,7 +183,7 @@ class LCD(object):
         return self.set(LCD_SET_CONTRAST, value)
 
     def set_brightness(self, value):
-        '''set backlight brightness to a value between 0 (off) anf 255'''
+        '''set backlight brightness to a value between 0 (off) and 255'''
 
         return self.set(LCD_SET_BRIGHTNESS, value)
 
