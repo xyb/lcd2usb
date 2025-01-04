@@ -192,6 +192,7 @@ class LCD(object):
 
         self.command(0x01)  # clear display
         self.home()
+        self._flush()
 
     def command(self, command, ctrl=LCD_BOTH):
         '''see HD44780 datasheet for a command description'''
