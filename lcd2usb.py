@@ -71,7 +71,7 @@ class LCD(object):
 
         self.ctrl0, self.ctrl1 = {0: (False, False),
                                   1: (True, False),
-                                  2: (True, True),
+                                  3: (True, True),
                                   }.get(self._get_controller())
 
         # to increase performance, a little buffer is being used to
