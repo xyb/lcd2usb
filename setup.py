@@ -9,7 +9,7 @@ setup(
     description=long_description.split('\n')[0],
     long_description='.. contents::\n\n' + long_description,
     keywords='usb lcd lcd2usb',
-    version='1.3',
+    version='1.4',
     author='Xie Yanbo',
     author_email='xieyanbo@gmail.com',
     url='http://github.com/xyb/lib2usb',
