@@ -71,7 +71,7 @@ class LCD(object):
 
         self.ctrl0, self.ctrl1 = {0: (False, False),
                                   1: (True, False),
-                                  2: (True, True),
+                                  3: (True, True),
                                   }.get(self._get_controller())
 
         # to increase performance, a little buffer is being used to
@@ -183,7 +183,7 @@ class LCD(object):
         return self.set(LCD_SET_CONTRAST, value)
 
     def set_brightness(self, value):
-        '''set backlight brightness to a value between 0 (off) anf 255'''
+        '''set backlight brightness to a value between 0 (off) and 255'''
 
         return self.set(LCD_SET_BRIGHTNESS, value)
 
@@ -192,6 +192,7 @@ class LCD(object):
 
         self.command(0x01)  # clear display
         self.home()
+        self._flush()
 
     def command(self, command, ctrl=LCD_BOTH):
         '''see HD44780 datasheet for a command description'''

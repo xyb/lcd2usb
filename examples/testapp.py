@@ -106,7 +106,7 @@ def main():
     lcd_get_controller(lcd)
     lcd_get_keys(lcd)
 
-    # adjust contrast and brightess
+    # adjust contrast and brightness
     lcd.set_contrast(200)
     lcd.set_brightness(255)
 
